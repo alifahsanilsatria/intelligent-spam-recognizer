@@ -1,0 +1,72 @@
+{% extends "app_spamrecognizer/layout/base.html" %}
+{% block content %}
+<h1 style="text-align:center;color: #ffec8b;font-family:Verdana">
+Selamat datang di Spam Recognizer AI</h1>
+<h3 style = "text-align: center; color:#ffec8b;font-style:Verdana">Dengan Akurasi sebesar {{ hasil }}</h3>
+<br>
+<div>
+<textarea id="temp" style="resize:none;width:500px;height:500px;font-size:18px;
+	margin-left:100px;" placeholder = "Mohon masukkan inputan di dalam kotak ini..."></textarea>
+<input id = "but" type="submit" class="btn btn-success" value="Proses" 
+	style="margin-left:30px;margin-top:-950px">
+</input>
+<textarea placeholder = "Ini adalah kotak output dari olahan pesan yang diberikan..." id = "res" 
+style="resize:none;width:500px;height:70px;margin-left:30px;font-size:18px;margin-bottom:430px;" readonly>
+</textarea>
+</div>
+<style>
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+{% block javascript %}
+<script>
+	var func = function(param){
+		console.log(param);
+		$.ajax({
+			method: "POST",
+			url: '{% url "spam:main" %}',
+			data: { paramm:param },
+			dataType: 'json',
+			success : function(response) {
+				console.log(response);
+				if ($('#res').val() != '') {
+					$('#res').val('');
+					$('#res').val(response.hasil);
+				}
+				else {
+					$('#res').val(response.hasil);
+				}
+			},
+			error : function(error) {
+				console.log(error);
+				alert("Mohon dicoba lagi");
+			}
+		})
+	};
+	$("#but").button().click(function (event) {
+		$('#res').val('Mohon tunggu....');
+		var value = $("#temp").val();
+		func(value);
+		event.preventDefault();
+	});
+</script>
+{% endblock %}
