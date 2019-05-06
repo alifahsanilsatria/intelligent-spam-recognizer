@@ -1,3 +1,1 @@
-# proyek-sistem-cerdas
-
-Proyek Sistem Cerdas untuk Indonesia (Nawacita).
+Link : http://intelligent-spam-recognizer.herokuapp.com/spam/
